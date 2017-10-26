@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.istic.aoc.ActiveObject.Strategy.AlgoDiffusion;
-import fr.istic.aoc.ActiveObject.Strategy.AlgoString;
+import fr.istic.aoc.ActiveObject.Strategy.AlgoName;
 import fr.istic.aoc.ActiveObject.Strategy.DiffusionAtomique;
 
 public class Adapter implements Subject {
@@ -32,7 +32,6 @@ public class Adapter implements Subject {
 	public void generate() {
 		this.generator.generate();
 		this.algoDiffusion.execute();
-
 	}
 
 	@Override
@@ -59,8 +58,10 @@ public class Adapter implements Subject {
 		this.algoDiffusion = algoDiffusion;
 	}
 
-	public AlgoString getAlgoDiffusion() {
+	public AlgoName getAlgoDiffusion() {
 		return algoDiffusion.getType();
 	}
+
+
 
 }

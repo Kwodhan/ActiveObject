@@ -17,15 +17,13 @@ public class DiffusionAtomique implements AlgoDiffusion {
 
 	@Override
 	public void configure() {
-//		for (ObservatorGeneratorAsync obs : g.getObservator()) {
-//			flags.add(false);
-//		}
+
 
 	}
 
 	@Override
 	public void execute() {
-		// attendre que tous le monde ai fini
+		
 		for (ObservatorGeneratorAsync obs : g.getObservator()) {
 
 			try {
@@ -41,9 +39,9 @@ public class DiffusionAtomique implements AlgoDiffusion {
 	}
 
 	@Override
-	public AlgoString getType() {
+	public AlgoName getType() {
 		// TODO Auto-generated method stub
-		return AlgoString.Atomique;
+		return AlgoName.Atomique;
 	}
 
 }

@@ -1,9 +1,12 @@
 package fr.istic.aoc.ActiveObject;
 
 import java.util.HashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import fr.istic.aoc.ActiveObject.Strategy.AlgoDiffusion;
-import fr.istic.aoc.ActiveObject.Strategy.AlgoString;
+import fr.istic.aoc.ActiveObject.Strategy.AlgoName;
 import fr.istic.aoc.ActiveObject.Strategy.DiffusionAtomique;
 import fr.istic.aoc.ActiveObject.Strategy.DiffusionEstampille;
 import fr.istic.aoc.ActiveObject.Strategy.DiffusionSequentielle;
@@ -14,17 +17,26 @@ import fr.istic.aoc.ActiveObject.Strategy.DiffusionSequentielle;
  */
 public class App {
 	public static void main(String[] args) {
+
+		// creer generateur
+		// attache canal comme observeur
+		// attache afficheur sur canal
+
+		// balance des .generate()
+		final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(Integer.MAX_VALUE);
+
 		Subject generator = new Adapter(new GeneratorImpl());
-		HashMap<AlgoString, AlgoDiffusion> dict = new HashMap<>();
+		HashMap<AlgoName, AlgoDiffusion> dict = new HashMap<>();
 
-		dict.put(AlgoString.Atomique, new DiffusionAtomique(generator));
-		dict.put(AlgoString.Sequentielle, new DiffusionSequentielle(generator));
-		dict.put(AlgoString.Estampille, new DiffusionEstampille(generator));
+		dict.put(AlgoName.Atomique, new DiffusionAtomique(generator));
+		dict.put(AlgoName.Sequentielle, new DiffusionSequentielle(generator));
+		dict.put(AlgoName.Estampille, new DiffusionEstampille(generator));
 
-		ObservatorGenerator observatorGenerator1 = new Afficheur();
-		ObservatorGenerator observatorGenerator2 = new Afficheur();
-		ObservatorGenerator observatorGenerator3 = new Afficheur();
-		ObservatorGenerator observatorGenerator4 = new Afficheur();
+
+		ObservatorGenerator observatorGenerator1 = new Afficheur("Afficheur1");
+		ObservatorGenerator observatorGenerator2 = new Afficheur("Afficheur2");
+		ObservatorGenerator observatorGenerator3 = new Afficheur("Afficheur3");
+		ObservatorGenerator observatorGenerator4 = new Afficheur("Afficheur4");
 
 		Canal canal1 = new Canal();
 		Canal canal2 = new Canal();
@@ -47,16 +59,19 @@ public class App {
 		canal4.setObsgenerator(observatorGenerator4);
 		generator.addObserver(canal4);
 
-		generator.setAlgoDiffusion(dict.get(AlgoString.Estampille));
-		generator.generate();
-		generator.generate();
-		generator.generate();
-		generator.generate();
+		generator.setAlgoDiffusion(dict.get(AlgoName.Sequentielle));
 
-		//
-		//
-		// generator.generate();
-		// generator.generate();
-
+		
+			scheduler.scheduleAtFixedRate(new Runnable() {
+				
+				@Override
+				public void run() {
+					generator.generate();
+					
+				}
+			}, 0, 100, TimeUnit.MILLISECONDS);
+		
+		
+			
 	}
 }

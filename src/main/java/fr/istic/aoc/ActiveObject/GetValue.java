@@ -13,7 +13,6 @@ public class GetValue implements Callable<Integer> {
 	}
 
 	public GetValue(Generator generator) {
-		super();
 		this.generator = generator;
 	}
 

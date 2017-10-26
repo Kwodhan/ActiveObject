@@ -1,6 +1,6 @@
 package fr.istic.aoc.ActiveObject.Strategy;
 
-public enum AlgoString {
+public enum AlgoName {
 Atomique,
 Estampille,
 Sequentielle,

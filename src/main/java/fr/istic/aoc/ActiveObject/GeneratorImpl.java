@@ -4,9 +4,6 @@ public class GeneratorImpl implements Generator {
 
 	private Integer value;
 
-	ObservatorGeneratorAsync async;
-
-	
 	public GeneratorImpl() {
 		super();
 		value = new Integer(0);

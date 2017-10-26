@@ -5,7 +5,7 @@ public interface AlgoDiffusion {
 
 	void execute();
 	
-	AlgoString getType();
+	AlgoName getType();
 	
 
 	

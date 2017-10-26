@@ -3,7 +3,7 @@ package fr.istic.aoc.ActiveObject;
 import java.util.List;
 
 import fr.istic.aoc.ActiveObject.Strategy.AlgoDiffusion;
-import fr.istic.aoc.ActiveObject.Strategy.AlgoString;
+import fr.istic.aoc.ActiveObject.Strategy.AlgoName;
 
 public interface Subject extends Generator {
 
@@ -12,5 +12,5 @@ public interface Subject extends Generator {
 	void removeObserver(ObservatorGeneratorAsync obs);
 	List<ObservatorGeneratorAsync> getObservator();
 	void setAlgoDiffusion(AlgoDiffusion algoDiffusion);
-	AlgoString getAlgoDiffusion();
+	AlgoName getAlgoDiffusion();
 }
