@@ -1,12 +1,14 @@
-package fr.istic.aoc.ActiveObject;
+package fr.istic.aoc.ActiveObject.Async;
 
 import java.util.concurrent.Callable;
 
+import fr.istic.aoc.ActiveObject.Display.Observer;
+
 public class Update implements Callable<Void> {
-	ObservatorGenerator observatorGenerator;
+	Observer<GeneratorAsync> observatorGenerator;
 	Canal canal;
 
-	public Update(ObservatorGenerator observatorGenerator, Canal canal) {
+	public Update(Observer<GeneratorAsync> observatorGenerator, Canal canal) {
 		super();
 		this.observatorGenerator = observatorGenerator;
 		this.canal = canal;

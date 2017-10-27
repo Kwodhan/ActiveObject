@@ -2,32 +2,29 @@ package fr.istic.aoc.ActiveObject.Strategy;
 
 import java.util.concurrent.ExecutionException;
 
-import fr.istic.aoc.ActiveObject.ObservatorGeneratorAsync;
-import fr.istic.aoc.ActiveObject.Subject;
+import fr.istic.aoc.ActiveObject.Async.ObserverGeneratorAsync;
+import fr.istic.aoc.ActiveObject.Subject.Generator;
 
 public class DiffusionAtomique implements AlgoDiffusion {
-	private Subject g;
 
-
-	public DiffusionAtomique(Subject g) {
+	private final Generator generator;
+	public DiffusionAtomique(Generator generator) {
 		super();
-		this.g = g;
-//		flags = new ArrayList<>();
+		this.generator=generator;
+
 	}
 
 	@Override
 	public void configure() {
 
-
 	}
 
 	@Override
 	public void execute() {
-		
-		for (ObservatorGeneratorAsync obs : g.getObservator()) {
 
+		for (ObserverGeneratorAsync<Generator> obs : this.generator.getObserver()) {
 			try {
-				obs.update(g).get();
+				obs.update(this.generator).get();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -1,14 +1,14 @@
 package fr.istic.aoc.ActiveObject.Strategy;
 
-import fr.istic.aoc.ActiveObject.ObservatorGeneratorAsync;
-import fr.istic.aoc.ActiveObject.Subject;
+import fr.istic.aoc.ActiveObject.Async.ObserverGeneratorAsync;
+import fr.istic.aoc.ActiveObject.Subject.Generator;
 
 public class DiffusionSequentielle implements AlgoDiffusion {
-	private Subject g;
+	private final Generator generator;
 
-	public DiffusionSequentielle(Subject g) {
+	public DiffusionSequentielle(Generator generator) {
 		super();
-		this.g = g;
+		this.generator = generator;
 
 	}
 
@@ -20,9 +20,9 @@ public class DiffusionSequentielle implements AlgoDiffusion {
 	@Override
 	public void execute() {
 
-		for (ObservatorGeneratorAsync obs : g.getObservator()) {
+		for (ObserverGeneratorAsync<Generator> obs : generator.getObserver()) {
 
-			obs.update(g);
+			obs.update(generator);
 
 		}
 	}

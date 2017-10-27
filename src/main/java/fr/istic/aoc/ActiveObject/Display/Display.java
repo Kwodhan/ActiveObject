@@ -1,12 +1,14 @@
-package fr.istic.aoc.ActiveObject;
+package fr.istic.aoc.ActiveObject.Display;
 
 import java.util.concurrent.ExecutionException;
 
-public class Afficheur implements ObservatorGenerator {
+import fr.istic.aoc.ActiveObject.Async.GeneratorAsync;
+
+public class Display implements Observer<GeneratorAsync> {
 	private final String name;
 	private Integer value;
 
-	public Afficheur(String name) {
+	public Display(String name) {
 		super();
 		this.name = name;
 		value = new Integer(0);

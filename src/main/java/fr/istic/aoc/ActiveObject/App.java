@@ -5,11 +5,16 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import fr.istic.aoc.ActiveObject.Async.Canal;
+import fr.istic.aoc.ActiveObject.Async.GeneratorAsync;
+import fr.istic.aoc.ActiveObject.Display.Display;
+import fr.istic.aoc.ActiveObject.Display.Observer;
 import fr.istic.aoc.ActiveObject.Strategy.AlgoDiffusion;
 import fr.istic.aoc.ActiveObject.Strategy.AlgoName;
 import fr.istic.aoc.ActiveObject.Strategy.DiffusionAtomique;
-import fr.istic.aoc.ActiveObject.Strategy.DiffusionEstampille;
 import fr.istic.aoc.ActiveObject.Strategy.DiffusionSequentielle;
+import fr.istic.aoc.ActiveObject.Subject.Generator;
+import fr.istic.aoc.ActiveObject.Subject.GeneratorImpl;
 
 /**
  * Hello world!
@@ -25,41 +30,38 @@ public class App {
 		// balance des .generate()
 		final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(Integer.MAX_VALUE);
 
-		Subject generator = new Adapter(new GeneratorImpl());
+		Generator generator = new GeneratorImpl();
+
+
 		HashMap<AlgoName, AlgoDiffusion> dict = new HashMap<>();
 
 		dict.put(AlgoName.Atomique, new DiffusionAtomique(generator));
 		dict.put(AlgoName.Sequentielle, new DiffusionSequentielle(generator));
-		dict.put(AlgoName.Estampille, new DiffusionEstampille(generator));
 
+		
+		Observer<GeneratorAsync> observatorGenerator1 = new Display("Afficheur1");
+		Observer<GeneratorAsync> observatorGenerator2 = new Display("Afficheur2");
+		Observer<GeneratorAsync> observatorGenerator3 = new Display("Afficheur3");
+		Observer<GeneratorAsync> observatorGenerator4 = new Display("Afficheur4");
 
-		ObservatorGenerator observatorGenerator1 = new Afficheur("Afficheur1");
-		ObservatorGenerator observatorGenerator2 = new Afficheur("Afficheur2");
-		ObservatorGenerator observatorGenerator3 = new Afficheur("Afficheur3");
-		ObservatorGenerator observatorGenerator4 = new Afficheur("Afficheur4");
+		
 
 		Canal canal1 = new Canal();
-		Canal canal2 = new Canal();
-		Canal canal3 = new Canal();
-		Canal canal4 = new Canal();
-
 		canal1.setGenerator(generator);
-		canal1.setObsgenerator(observatorGenerator1);
-		generator.addObserver(canal1);
-
+		canal1.addObserver(observatorGenerator1);
+		
+		Canal canal2 = new Canal();
 		canal2.setGenerator(generator);
-		canal2.setObsgenerator(observatorGenerator2);
-		generator.addObserver(canal2);
-
+		canal2.addObserver(observatorGenerator2);
+		
+		Canal canal3 = new Canal();
 		canal3.setGenerator(generator);
-		canal3.setObsgenerator(observatorGenerator3);
-		generator.addObserver(canal3);
-
+		canal3.addObserver(observatorGenerator3);
+		
+		Canal canal4 = new Canal();
 		canal4.setGenerator(generator);
-		canal4.setObsgenerator(observatorGenerator4);
-		generator.addObserver(canal4);
+		canal4.addObserver(observatorGenerator4);
 
-		generator.setAlgoDiffusion(dict.get(AlgoName.Sequentielle));
 
 		
 			scheduler.scheduleAtFixedRate(new Runnable() {
