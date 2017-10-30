@@ -3,8 +3,10 @@ package fr.istic.aoc.ActiveObject.Display;
 import java.util.concurrent.ExecutionException;
 
 import fr.istic.aoc.ActiveObject.Async.GeneratorAsync;
+import javafx.application.Platform;
+import javafx.scene.control.Label;
 
-public class Display implements Observer<GeneratorAsync> {
+public class Display extends Label implements Observer<GeneratorAsync> {
 	private final String name;
 	private Integer value;
 
@@ -19,7 +21,12 @@ public class Display implements Observer<GeneratorAsync> {
 
 		try {
 			value = generatorAsync.getValue().get();
-			System.out.println(this);
+			Platform.runLater(() -> {
+				this.setText(""+value);
+				;
+			});
+
+			
 
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -30,9 +37,9 @@ public class Display implements Observer<GeneratorAsync> {
 		}
 
 	}
-	
+
 	public String toString() {
-		return this.name+" : "+value;
+		return this.name + " : " + value;
 	}
 
 }

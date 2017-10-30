@@ -1,8 +1,6 @@
 package fr.istic.aoc.ActiveObject.Subject;
 
-import java.util.List;
-
-import fr.istic.aoc.ActiveObject.Async.ObserverGeneratorAsync;
+import fr.istic.aoc.ActiveObject.Strategy.AlgoDiffusion;
 
 /**
  * SujetF
@@ -10,15 +8,12 @@ import fr.istic.aoc.ActiveObject.Async.ObserverGeneratorAsync;
  * @author aferey
  *
  */
-public interface Generator {
+public interface Generator extends SubjectAsync<Generator> {
 
 	Integer getValue();
 
 	void generate();
 
-	void addObserver(ObserverGeneratorAsync<Generator> obs);
+	void setAlgoDiffusion(AlgoDiffusion algoDiffusion);
 
-	void removeObserver(ObserverGeneratorAsync<Generator> obs);
-	
-	List<ObserverGeneratorAsync<Generator>> getObserver();
 }

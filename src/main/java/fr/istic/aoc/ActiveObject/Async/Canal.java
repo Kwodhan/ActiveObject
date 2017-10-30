@@ -10,7 +10,7 @@ import fr.istic.aoc.ActiveObject.Display.Observer;
 import fr.istic.aoc.ActiveObject.Subject.Generator;
 import fr.istic.aoc.ActiveObject.Subject.Subject;
 
-public class Canal implements GeneratorAsync, ObserverGeneratorAsync<Generator>, Subject<GeneratorAsync> {
+public class Canal implements GeneratorAsync, ObserverAsync<Generator>, Subject<GeneratorAsync> {
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(Integer.MAX_VALUE);
 
 	private Generator generator;

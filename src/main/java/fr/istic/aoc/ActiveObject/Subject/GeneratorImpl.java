@@ -3,7 +3,7 @@ package fr.istic.aoc.ActiveObject.Subject;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.istic.aoc.ActiveObject.Async.ObserverGeneratorAsync;
+import fr.istic.aoc.ActiveObject.Async.ObserverAsync;
 import fr.istic.aoc.ActiveObject.Strategy.AlgoDiffusion;
 import fr.istic.aoc.ActiveObject.Strategy.DiffusionAtomique;
 
@@ -13,7 +13,7 @@ public class GeneratorImpl implements Generator {
 
 	private AlgoDiffusion algoDiffusion;
 
-	List<ObserverGeneratorAsync<Generator>> list;
+	List<ObserverAsync<Generator>> list;
 
 	public GeneratorImpl() {
 		super();
@@ -40,18 +40,18 @@ public class GeneratorImpl implements Generator {
 
 	}
 
-	public void addObserver(ObserverGeneratorAsync<Generator> obs) {
+	public void addObserver(ObserverAsync<Generator> obs) {
 		this.list.add(obs);
 
 	}
 
-	public void removeObserver(ObserverGeneratorAsync<Generator> obs) {
+	public void removeObserver(ObserverAsync<Generator> obs) {
 		this.list.remove(obs);
 
 	}
 
 	@Override
-	public List<ObserverGeneratorAsync<Generator>> getObserver() {
+	public List<ObserverAsync<Generator>> getObserver() {
 		// TODO Auto-generated method stub
 		return this.list;
 	}
