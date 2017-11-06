@@ -16,17 +16,19 @@ public class Canal implements GeneratorAsync, ObserverAsync<Generator>, Subject<
 	private Generator generator;
 	private Observer<GeneratorAsync> obsgenerator;
 	private final Random random;
+	private final int second;
 
-	public Canal() {
+	public Canal(int second) {
 		super();
 		random = new Random();
+		this.second=second;
 
 	}
 
 	@Override
 	public Future<Void> update(Generator generator) {
 		Update update = new Update(obsgenerator, this);
-		return scheduler.schedule(update, random.nextInt(500), TimeUnit.MILLISECONDS);
+		return scheduler.schedule(update,random.nextInt( second), TimeUnit.SECONDS);
 	}
 
 	public Generator getGenerator() {
@@ -53,7 +55,7 @@ public class Canal implements GeneratorAsync, ObserverAsync<Generator>, Subject<
 
 		GetValue getValue = new GetValue(generator);
 
-		return scheduler.schedule(getValue, random.nextInt(500), TimeUnit.MILLISECONDS);
+		return scheduler.schedule(getValue, random.nextInt( second), TimeUnit.SECONDS);
 	}
 
 	@Override

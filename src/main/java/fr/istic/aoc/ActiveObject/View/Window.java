@@ -52,52 +52,52 @@ public class Window extends Application {
 		Observer<GeneratorAsync> observatorGenerator2 = new Display("Afficheur2");
 		Observer<GeneratorAsync> observatorGenerator3 = new Display("Afficheur3");
 		Observer<GeneratorAsync> observatorGenerator4 = new Display("Afficheur4");
-		Observer<GeneratorAsync> observatorGenerator5 = new Display("Afficheur5");
-		Observer<GeneratorAsync> observatorGenerator6 = new Display("Afficheur6");
-		Canal canal1 = new Canal();
+//		Observer<GeneratorAsync> observatorGenerator5 = new Display("Afficheur5");
+//		Observer<GeneratorAsync> observatorGenerator6 = new Display("Afficheur6");
+		Canal canal1 = new Canal(1);
 		canal1.setGenerator(generator);
 		canal1.addObserver(observatorGenerator1);
 
-		Canal canal2 = new Canal();
+		Canal canal2 = new Canal(2);
 		canal2.setGenerator(generator);
 		canal2.addObserver(observatorGenerator2);
 
-		Canal canal3 = new Canal();
+		Canal canal3 = new Canal(3);
 		canal3.setGenerator(generator);
 		canal3.addObserver(observatorGenerator3);
 
-		Canal canal4 = new Canal();
+		Canal canal4 = new Canal(3);
 		canal4.setGenerator(generator);
 		canal4.addObserver(observatorGenerator4);
 		
-		Canal canal5 = new Canal();
-		canal5.setGenerator(generator);
-		canal5.addObserver(observatorGenerator5);
-		
-		Canal canal6 = new Canal();
-		canal6.setGenerator(generator);
-		canal6.addObserver(observatorGenerator6);
+//		Canal canal5 = new Canal();
+//		canal5.setGenerator(generator);
+//		canal5.addObserver(observatorGenerator5);
+//		
+//		Canal canal6 = new Canal();
+//		canal6.setGenerator(generator);
+//		canal6.addObserver(observatorGenerator6);
 
 		this.addDisplay(observatorGenerator1);
 		this.addDisplay(observatorGenerator2);
 		this.addDisplay(observatorGenerator3);
 		this.addDisplay(observatorGenerator4);
-		this.addDisplay(observatorGenerator5);
-		this.addDisplay(observatorGenerator6);
+//		this.addDisplay(observatorGenerator5);
+//		this.addDisplay(observatorGenerator6);
 	
 
 	}
 
 	@Override
 	public void start(Stage primaryStage) {
-		final Button button1 = new Button("Atomique");
-		final Button button2 = new Button("Sequentielle");
-		final Button button3 = new Button("Start");
-		final Button button4 = new Button("Stop");
-		GridPane.setConstraints(button1, 0, 0);
-		GridPane.setConstraints(button2, 1, 0);
-		GridPane.setConstraints(button3, 0, 1);
-		GridPane.setConstraints(button4, 1, 1);
+		final Button atomique = new Button("Atomique");
+		final Button seq = new Button("Sequentielle");
+		final Button start = new Button("Start");
+		final Button stop = new Button("Stop");
+		GridPane.setConstraints(atomique, 0, 0);
+		GridPane.setConstraints(seq, 1, 0);
+		GridPane.setConstraints(start, 0, 1);
+		GridPane.setConstraints(stop, 1, 1);
 		// final Region region = new Region();
 		// GridPane.setConstraints(region, 0, 0, 1, Integer.MAX_VALUE);
 		// region.setStyle("-fx-background-color: gold; -fx-border-color: goldenrod;");
@@ -145,13 +145,14 @@ public class Window extends Application {
 				new RowConstraints(25, Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE));
 		controlPanel.getRowConstraints().get(0).setVgrow(Priority.NEVER);
 		controlPanel.getRowConstraints().get(1).setVgrow(Priority.NEVER);
-		controlPanel.getChildren().setAll(button1, button2,button3,button4);
+		controlPanel.getChildren().setAll(atomique, seq,start,stop);
 
 		//
-		button1.setOnAction(new EventHandler<ActionEvent>() {
+		atomique.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
 				scheduler.shutdown();
+				
 				try {
 					scheduler.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
 				} catch (InterruptedException interruptedException) {
@@ -170,7 +171,7 @@ public class Window extends Application {
 				}, 0, 100, TimeUnit.MILLISECONDS);
 			}
 		});
-		button2.setOnAction(new EventHandler<ActionEvent>() {
+		seq.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
 				scheduler.shutdown();
@@ -191,7 +192,7 @@ public class Window extends Application {
 				}, 0, 100, TimeUnit.MILLISECONDS);
 			}
 		});
-		button3.setOnAction(new EventHandler<ActionEvent>() {
+		start.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
 				scheduler.shutdown();
@@ -212,7 +213,7 @@ public class Window extends Application {
 				}, 0, 100, TimeUnit.MILLISECONDS);
 			}
 		});
-		button4.setOnAction(new EventHandler<ActionEvent>() {
+		stop.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
 				scheduler.shutdown();
