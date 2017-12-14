@@ -1,15 +1,18 @@
 package fr.istic.aoc.ActiveObject.View;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import fr.istic.aoc.ActiveObject.Async.Canal;
 import fr.istic.aoc.ActiveObject.Async.GeneratorAsync;
-import fr.istic.aoc.ActiveObject.Display.Display;
+import fr.istic.aoc.ActiveObject.Display.DisplayFx;
 import fr.istic.aoc.ActiveObject.Display.Observer;
 import fr.istic.aoc.ActiveObject.Strategy.AlgoDiffusion;
 import fr.istic.aoc.ActiveObject.Strategy.AlgoName;
@@ -19,21 +22,36 @@ import fr.istic.aoc.ActiveObject.Subject.Generator;
 import fr.istic.aoc.ActiveObject.Subject.GeneratorImpl;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 
-public class Window extends Application {
+public class Window extends Application implements Initializable {
 
-	List<Display> displays = new ArrayList<>();
+	List<DisplayFx> displays = new ArrayList<>();
+	@FXML
+	RadioButton atomique;
 
+	@FXML
+	RadioButton sequentielle ;
+
+	@FXML
+	Button start;
+
+	@FXML
+	Button stop ;
+
+	@FXML
+	ListView<Label> listView;
+	
 	Generator generator = new GeneratorImpl();
 
 	HashMap<AlgoName, AlgoDiffusion> dict = new HashMap<>();
@@ -41,39 +59,44 @@ public class Window extends Application {
 	ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(Integer.MAX_VALUE);
 
 	@Override
-	public void init() throws Exception {
+	public void initialize(URL location, ResourceBundle resources) {
 
-		super.init();
+		final ToggleGroup group = new ToggleGroup();
+		atomique.setToggleGroup(group);
+		atomique.setSelected(true);
+		sequentielle.setToggleGroup(group);
 
 		dict.put(AlgoName.Atomique, new DiffusionAtomique(generator));
 		dict.put(AlgoName.Sequentielle, new DiffusionSequentielle(generator));
+
+
 		generator.setAlgoDiffusion(dict.get(AlgoName.Atomique));
-		Observer<GeneratorAsync> observatorGenerator1 = new Display("Afficheur1");
-		Observer<GeneratorAsync> observatorGenerator2 = new Display("Afficheur2");
-		Observer<GeneratorAsync> observatorGenerator3 = new Display("Afficheur3");
-		Observer<GeneratorAsync> observatorGenerator4 = new Display("Afficheur4");
+		Observer<GeneratorAsync> observatorGenerator1 = new DisplayFx("Afficheur1");
+		Observer<GeneratorAsync> observatorGenerator2 = new DisplayFx("Afficheur2");
+		Observer<GeneratorAsync> observatorGenerator3 = new DisplayFx("Afficheur3");
+		Observer<GeneratorAsync> observatorGenerator4 = new DisplayFx("Afficheur4");
 //		Observer<GeneratorAsync> observatorGenerator5 = new Display("Afficheur5");
 //		Observer<GeneratorAsync> observatorGenerator6 = new Display("Afficheur6");
-		Canal canal1 = new Canal(1);
+		Canal canal1 = new Canal(0);
 		canal1.setGenerator(generator);
 		canal1.addObserver(observatorGenerator1);
 
-		Canal canal2 = new Canal(2);
+		Canal canal2 = new Canal(200);
 		canal2.setGenerator(generator);
 		canal2.addObserver(observatorGenerator2);
 
-		Canal canal3 = new Canal(3);
+		Canal canal3 = new Canal(400);
 		canal3.setGenerator(generator);
 		canal3.addObserver(observatorGenerator3);
 
-		Canal canal4 = new Canal(3);
+		Canal canal4 = new Canal(800);
 		canal4.setGenerator(generator);
 		canal4.addObserver(observatorGenerator4);
-		
+
 //		Canal canal5 = new Canal();
 //		canal5.setGenerator(generator);
 //		canal5.addObserver(observatorGenerator5);
-//		
+//
 //		Canal canal6 = new Canal();
 //		canal6.setGenerator(generator);
 //		canal6.addObserver(observatorGenerator6);
@@ -84,166 +107,91 @@ public class Window extends Application {
 		this.addDisplay(observatorGenerator4);
 //		this.addDisplay(observatorGenerator5);
 //		this.addDisplay(observatorGenerator6);
-	
+		listView.getItems().addAll(displays);
+
 
 	}
 
+
+
+
 	@Override
 	public void start(Stage primaryStage) {
-		final Button atomique = new Button("Atomique");
-		final Button seq = new Button("Sequentielle");
-		final Button start = new Button("Start");
-		final Button stop = new Button("Stop");
-		GridPane.setConstraints(atomique, 0, 0);
-		GridPane.setConstraints(seq, 1, 0);
-		GridPane.setConstraints(start, 0, 1);
-		GridPane.setConstraints(stop, 1, 1);
-		// final Region region = new Region();
-		// GridPane.setConstraints(region, 0, 0, 1, Integer.MAX_VALUE);
-		// region.setStyle("-fx-background-color: gold; -fx-border-color: goldenrod;");
-		// region.setPrefSize(100, 100);
 
-		final GridPane root = new GridPane();
-		root.getRowConstraints().setAll(new RowConstraints(75, Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE),
-				new RowConstraints(75, Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE));
-		//
-		root.getRowConstraints().get(0).setVgrow(Priority.ALWAYS);
-		root.getRowConstraints().get(1).setVgrow(Priority.ALWAYS);
-		root.getColumnConstraints()
-				.setAll(new ColumnConstraints(75, Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE));
-		root.getColumnConstraints().get(0).setHgrow(Priority.ALWAYS);
+		Parent root = null;
 
-		// Liste afficheur
-		final GridPane afficheur = new GridPane();
-		afficheur.getColumnConstraints().setAll(
-				new ColumnConstraints(75, Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE),
-				new ColumnConstraints(75, Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE));
-		afficheur.getColumnConstraints().get(0).setHgrow(Priority.ALWAYS);
-		afficheur.getColumnConstraints().get(1).setHgrow(Priority.ALWAYS);
-		//
-		for (int i = 0; i < this.displays.size(); i++) {
-			afficheur.getRowConstraints()
-					.add(new RowConstraints(25, Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE));
-			afficheur.getRowConstraints().get(i).setVgrow(Priority.NEVER);
-			afficheur.add(this.displays.get(i), 1, i);
-			afficheur.add(new Label("Afficheur " + i), 0, i);
-			// afficheur.add(this.labels.get(i), 0, i);
-
+		try {
+			root = FXMLLoader.load(getClass().getClassLoader().getResource("main.fxml"));
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		//
-		// ControlPanel
-		final GridPane controlPanel = new GridPane();
-		controlPanel.getColumnConstraints().setAll(
-				new ColumnConstraints(75, Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE),
-				new ColumnConstraints(75, Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE));
-		controlPanel.getColumnConstraints().get(0).setHgrow(Priority.ALWAYS);
-		controlPanel.getColumnConstraints().get(1).setHgrow(Priority.ALWAYS);
-		//
-		controlPanel.getRowConstraints().setAll(
-				new RowConstraints(25, Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE),
-				new RowConstraints(25, Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE),
-				new RowConstraints(25, Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE));
-		controlPanel.getRowConstraints().get(0).setVgrow(Priority.NEVER);
-		controlPanel.getRowConstraints().get(1).setVgrow(Priority.NEVER);
-		controlPanel.getChildren().setAll(atomique, seq,start,stop);
 
-		//
-		atomique.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				scheduler.shutdown();
-				
-				try {
-					scheduler.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-				} catch (InterruptedException interruptedException) {
-
-				}
-				scheduler = Executors.newScheduledThreadPool(Integer.MAX_VALUE);
-				generator.setAlgoDiffusion(dict.get(AlgoName.Atomique));
-
-				scheduler.scheduleAtFixedRate(new Runnable() {
-
-					@Override
-					public void run() {
-						generator.generate();
-
-					}
-				}, 0, 100, TimeUnit.MILLISECONDS);
-			}
-		});
-		seq.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				scheduler.shutdown();
-				try {
-					scheduler.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-				} catch (InterruptedException interruptedException) {
-
-				}
-				scheduler = Executors.newScheduledThreadPool(Integer.MAX_VALUE);
-				generator.setAlgoDiffusion(dict.get(AlgoName.Sequentielle));
-				scheduler.scheduleAtFixedRate(new Runnable() {
-
-					@Override
-					public void run() {
-						generator.generate();
-
-					}
-				}, 0, 100, TimeUnit.MILLISECONDS);
-			}
-		});
-		start.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				scheduler.shutdown();
-				try {
-					scheduler.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-				} catch (InterruptedException interruptedException) {
-
-				}
-				scheduler = Executors.newScheduledThreadPool(Integer.MAX_VALUE);
-			
-				scheduler.scheduleAtFixedRate(new Runnable() {
-
-					@Override
-					public void run() {
-						generator.generate();
-
-					}
-				}, 0, 100, TimeUnit.MILLISECONDS);
-			}
-		});
-		stop.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				scheduler.shutdown();
-				try {
-					scheduler.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-				} catch (InterruptedException interruptedException) {
-					System.out.println("mrde");
-				}
-				scheduler = Executors.newScheduledThreadPool(Integer.MAX_VALUE);
-
-			}
-		});
-		root.add(afficheur, 0, 0);
-		root.add(controlPanel, 0, 1);
-		afficheur.setGridLinesVisible(true);
-		controlPanel.setGridLinesVisible(true);
-		root.setGridLinesVisible(true);
-		final Scene scene = new Scene(root, 350, 300);
+		final Scene scene = new Scene(root, 350, 350);
 		primaryStage.setTitle("Test de GridPane");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
 
-	public void addDisplay(Observer<GeneratorAsync> display) {
-		this.displays.add((Display) display);
+	@FXML
+	private void onClickAtomique(ActionEvent event) {
 
+		generator.setAlgoDiffusion(dict.get(AlgoName.Atomique));
+
+	}
+
+	@FXML
+	private void onClickSequentielle(ActionEvent event) {
+
+		generator.setAlgoDiffusion(dict.get(AlgoName.Sequentielle));
+
+	}
+
+
+	@FXML
+	private void onClickStart(ActionEvent event) {
+		scheduler.shutdown();
+		try {
+			scheduler.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+		} catch (InterruptedException interruptedException) {
+
+		}
+		scheduler = Executors.newScheduledThreadPool(Integer.MAX_VALUE);
+
+		scheduler.scheduleAtFixedRate(new Runnable() {
+
+			@Override
+			public void run() {
+				generator.generate();
+
+			}
+		}, 0, 1000, TimeUnit.MILLISECONDS);
+		sequentielle.setDisable(true);
+		atomique.setDisable(true);
+	}
+
+	@FXML
+	private void onClickStop(ActionEvent event) {
+		scheduler.shutdown();
+		try {
+			scheduler.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+		} catch (InterruptedException interruptedException) {
+			System.out.println("mrde");
+		}
+		scheduler = Executors.newScheduledThreadPool(Integer.MAX_VALUE);
+		sequentielle.setDisable(false);
+		atomique.setDisable(false);
+	}
+
+
+
+	public void addDisplay(Observer<GeneratorAsync> display) {
+
+		this.displays.add((DisplayFx) display);
 	}
 
 	public static void main(String[] args) {
-
 		launch(args);
 	}
+
+
 }

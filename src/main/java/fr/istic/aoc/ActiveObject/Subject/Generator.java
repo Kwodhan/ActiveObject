@@ -1,7 +1,5 @@
 package fr.istic.aoc.ActiveObject.Subject;
 
-import fr.istic.aoc.ActiveObject.Strategy.AlgoDiffusion;
-
 /**
  * SujetF
  * 
@@ -14,6 +12,6 @@ public interface Generator extends SubjectAsync<Generator> {
 
 	void generate();
 
-	void setAlgoDiffusion(AlgoDiffusion algoDiffusion);
+	
 
 }

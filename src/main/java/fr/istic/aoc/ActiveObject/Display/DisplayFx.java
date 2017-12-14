@@ -6,11 +6,11 @@ import fr.istic.aoc.ActiveObject.Async.GeneratorAsync;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 
-public class Display extends Label implements Observer<GeneratorAsync> {
+public class DisplayFx extends Label implements Observer<GeneratorAsync> {
 	private final String name;
 	private Integer value;
 
-	public Display(String name) {
+	public DisplayFx(String name) {
 		super();
 		this.name = name;
 		value = new Integer(0);
