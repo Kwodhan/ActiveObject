@@ -1,4 +1,4 @@
-package fr.istic.aoc.ActiveObject.Subject;
+package fr.istic.aoc.ActiveObject.Async;
 
 import java.util.List;
 

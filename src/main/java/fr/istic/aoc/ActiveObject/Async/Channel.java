@@ -8,8 +8,8 @@ import java.util.concurrent.TimeUnit;
 import fr.istic.aoc.ActiveObject.Display.Observer;
 import fr.istic.aoc.ActiveObject.Subject.Generator;
 import fr.istic.aoc.ActiveObject.Subject.Subject;
-// créer 4 canaux (0,100,400,800) avec
-public class Canal implements GeneratorAsync, ObserverAsync<Generator>, Subject<GeneratorAsync> {
+// créer 4 canaux (0,100,400,800)
+public class Channel implements GeneratorAsync, ObserverAsync<Generator>, Subject<GeneratorAsync> {
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(Integer.MAX_VALUE);
 
 	private Generator generator;
@@ -17,7 +17,7 @@ public class Canal implements GeneratorAsync, ObserverAsync<Generator>, Subject<
 	// private final Random random;
 	private final int millisecond;
 
-	public Canal(int millisecond) {
+	public Channel(int millisecond) {
 		super();
 		// random = new Random();
 		this.millisecond=millisecond;

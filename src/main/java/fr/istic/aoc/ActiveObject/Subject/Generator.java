@@ -1,5 +1,7 @@
 package fr.istic.aoc.ActiveObject.Subject;
 
+import fr.istic.aoc.ActiveObject.Async.SubjectAsync;
+
 /**
  * SujetF
  * 

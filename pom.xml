@@ -5,19 +5,26 @@
   <groupId>fr.istic.aoc</groupId>
   <artifactId>ActiveObject</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
   <build>
     <plugins>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
+        <artifactId>maven-jar-plugin</artifactId>
         <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
+          <archive>
+            <manifest>
+                <addClasspath>true</addClasspath>
+                <classpathPrefix>lib/</classpathPrefix>
+              <mainClass>fr.istic.aoc.ActiveObject.View.Window</mainClass>
+            </manifest>
+          </archive>
         </configuration>
       </plugin>
     </plugins>
   </build>
-  <packaging>jar</packaging>
+
 
   <name>ActiveObject</name>
   <url>http://maven.apache.org</url>

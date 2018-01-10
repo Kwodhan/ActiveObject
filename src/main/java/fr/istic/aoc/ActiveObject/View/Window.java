@@ -10,7 +10,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import fr.istic.aoc.ActiveObject.Async.Canal;
+import fr.istic.aoc.ActiveObject.Async.Channel;
 import fr.istic.aoc.ActiveObject.Async.GeneratorAsync;
 import fr.istic.aoc.ActiveObject.Display.DisplayFx;
 import fr.istic.aoc.ActiveObject.Display.Observer;
@@ -36,7 +36,7 @@ import javafx.stage.Stage;
 
 public class Window extends Application implements Initializable {
 
-	List<DisplayFx> displays = new ArrayList<>();
+
 	@FXML
 	RadioButton atomique;
 
@@ -66,47 +66,62 @@ public class Window extends Application implements Initializable {
 		atomique.setSelected(true);
 		sequentielle.setToggleGroup(group);
 
-		dict.put(AlgoName.Atomique, new DiffusionAtomique(generator));
-		dict.put(AlgoName.Sequentielle, new DiffusionSequentielle(generator));
+		// liste des algos
+		AlgoDiffusion atomique = new DiffusionAtomique(generator);
+		AlgoDiffusion sequentielle = new DiffusionSequentielle(generator);
+		dict.put(atomique.getType(),atomique);
+		dict.put(sequentielle.getType(),sequentielle );
 
 
 		generator.setAlgoDiffusion(dict.get(AlgoName.Atomique));
+
+		// Observator
 		Observer<GeneratorAsync> observatorGenerator1 = new DisplayFx("Afficheur1");
 		Observer<GeneratorAsync> observatorGenerator2 = new DisplayFx("Afficheur2");
 		Observer<GeneratorAsync> observatorGenerator3 = new DisplayFx("Afficheur3");
 		Observer<GeneratorAsync> observatorGenerator4 = new DisplayFx("Afficheur4");
 //		Observer<GeneratorAsync> observatorGenerator5 = new Display("Afficheur5");
 //		Observer<GeneratorAsync> observatorGenerator6 = new Display("Afficheur6");
-		Canal canal1 = new Canal(0);
-		canal1.setGenerator(generator);
-		canal1.addObserver(observatorGenerator1);
 
-		Canal canal2 = new Canal(200);
-		canal2.setGenerator(generator);
-		canal2.addObserver(observatorGenerator2);
+		//couplage 1
+		Channel channel1 = new Channel(0);
+		channel1.setGenerator(generator);
+		channel1.addObserver(observatorGenerator1);
 
-		Canal canal3 = new Canal(400);
-		canal3.setGenerator(generator);
-		canal3.addObserver(observatorGenerator3);
+		//couplage 2
+		Channel channel2 = new Channel(200);
+		channel2.setGenerator(generator);
+		channel2.addObserver(observatorGenerator2);
 
-		Canal canal4 = new Canal(800);
-		canal4.setGenerator(generator);
-		canal4.addObserver(observatorGenerator4);
+		//couplage 3
+		Channel channel3 = new Channel(400);
+		channel3.setGenerator(generator);
+		channel3.addObserver(observatorGenerator3);
 
-//		Canal canal5 = new Canal();
+		//couplage 4
+		Channel channel4 = new Channel(800);
+		channel4.setGenerator(generator);
+		channel4.addObserver(observatorGenerator4);
+
+		//couplage 5
+//		Channel canal5 = new Channel(1200);
 //		canal5.setGenerator(generator);
 //		canal5.addObserver(observatorGenerator5);
 //
-//		Canal canal6 = new Canal();
+		//couplage 6
+//		Channel canal6 = new Channel(1600);
 //		canal6.setGenerator(generator);
 //		canal6.addObserver(observatorGenerator6);
 
-		this.addDisplay(observatorGenerator1);
-		this.addDisplay(observatorGenerator2);
-		this.addDisplay(observatorGenerator3);
-		this.addDisplay(observatorGenerator4);
-//		this.addDisplay(observatorGenerator5);
-//		this.addDisplay(observatorGenerator6);
+        List<DisplayFx> displays = new ArrayList<>();
+        displays.add((DisplayFx) observatorGenerator1);
+        displays.add((DisplayFx) observatorGenerator2);
+        displays.add((DisplayFx) observatorGenerator3);
+        displays.add((DisplayFx) observatorGenerator4);
+//      displays.add((DisplayFx) observatorGenerator5);
+//      displays.add((DisplayFx) observatorGenerator6);
+
+
 		listView.getItems().addAll(displays);
 
 
@@ -182,16 +197,14 @@ public class Window extends Application implements Initializable {
 		atomique.setDisable(false);
 	}
 
+    public static void main(String[] args) {
+        launch(args);
+    }
 
 
-	public void addDisplay(Observer<GeneratorAsync> display) {
 
-		this.displays.add((DisplayFx) display);
-	}
 
-	public static void main(String[] args) {
-		launch(args);
-	}
+
 
 
 }

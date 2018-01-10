@@ -3,6 +3,9 @@ package fr.istic.aoc.ActiveObject.Strategy;
 import fr.istic.aoc.ActiveObject.Async.ObserverAsync;
 import fr.istic.aoc.ActiveObject.Subject.Generator;
 
+/**
+ * lecture chaotique
+ */
 public class DiffusionSequentielle implements AlgoDiffusion {
 	private final Generator generator;
 
